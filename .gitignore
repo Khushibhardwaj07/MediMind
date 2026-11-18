@@ -1,0 +1,12 @@
+# Packages are huge and can be re-downloaded
+node_modules/
+
+# Secrets must NEVER go to Git
+.env
+
+# Logs
+*.log
+
+# Windows/Mac junk
+.DS_Store
+Thumbs.db
