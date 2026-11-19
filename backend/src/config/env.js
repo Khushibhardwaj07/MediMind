@@ -3,11 +3,24 @@
 // instead of failing later with a confusing error.
 require('dotenv').config();
 
-const required = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
+const required = [
+  'DB_HOST',
+  'DB_PORT',
+  'DB_USER',
+  'DB_PASSWORD',
+  'DB_NAME',
+  'JWT_ACCESS_SECRET',
+];
 const missing = required.filter((key) => !process.env[key]);
 
 if (missing.length > 0) {
   console.error(`Missing environment variables in .env: ${missing.join(', ')}`);
+  process.exit(1);
+}
+
+// A short secret is easy to guess, which would let attackers forge tokens.
+if (process.env.JWT_ACCESS_SECRET.length < 32) {
+  console.error('JWT_ACCESS_SECRET must be at least 32 characters long.');
   process.exit(1);
 }
 
@@ -21,6 +34,13 @@ const config = {
     password: process.env.DB_PASSWORD,
     name: process.env.DB_NAME,
   },
+  jwt: {
+    accessSecret: process.env.JWT_ACCESS_SECRET,
+    accessExpiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || '15m',
+    refreshDays: Number(process.env.REFRESH_TOKEN_DAYS) || 7,
+  },
+  // Higher = slower to crack, but also slower for us. 12 is a good balance.
+  bcryptRounds: 12,
 };
 
 module.exports = config;
