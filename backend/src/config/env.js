@@ -41,6 +41,15 @@ const config = {
   },
   // Higher = slower to crack, but also slower for us. 12 is a good balance.
   bcryptRounds: 12,
+  // Websites allowed to call our API from a browser (comma-separated in .env).
+  corsOrigins: (process.env.CORS_ORIGIN || 'http://localhost:5173')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+  rateLimit: {
+    apiMax: Number(process.env.API_RATE_LIMIT_MAX) || 300,
+    authMax: Number(process.env.AUTH_RATE_LIMIT_MAX) || 10,
+  },
 };
 
 module.exports = config;

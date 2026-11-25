@@ -3,14 +3,35 @@ const asyncHandler = require('../utils/asyncHandler');
 const AppError = require('../utils/appError');
 const authService = require('../services/auth.service');
 const userModel = require('../models/user.model');
+const audit = require('../services/audit.service');
 
 const signup = asyncHandler(async (req, res) => {
   const result = await authService.signup(req.body);
+  audit.record(req, 'SIGNUP', {
+    userId: result.user.id,
+    entity: 'user',
+    entityId: result.user.id,
+  });
   res.status(201).json(result);
 });
 
 const login = asyncHandler(async (req, res) => {
-  const result = await authService.login(req.body);
+  let result;
+  try {
+    result = await authService.login(req.body);
+  } catch (err) {
+    // Failed logins are worth recording. We don't store the email that was tried.
+    if (err.statusCode === 401) {
+      audit.record(req, 'LOGIN_FAILED');
+    }
+    throw err;
+  }
+
+  audit.record(req, 'LOGIN', {
+    userId: result.user.id,
+    entity: 'user',
+    entityId: result.user.id,
+  });
   res.status(200).json(result);
 });
 

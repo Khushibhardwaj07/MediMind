@@ -1,8 +1,10 @@
-// Returns a middleware that checks req.body against a Zod schema.
-// On success, req.body is replaced with the CLEANED data
-// (trimmed, lowercased, and with unknown fields removed).
-const validate = (schema) => (req, res, next) => {
-  const result = schema.safeParse(req.body);
+// Returns a middleware that checks part of the request against a Zod schema.
+// source is 'body' (default), 'params' (the :id in a URL) or 'query' (?limit=5).
+// For the body we replace req.body with the CLEANED data (trimmed, lowercased,
+// unknown fields removed). For params and query we put the cleaned data in
+// req.validated, because Express does not let us overwrite those.
+const validate = (schema, source = 'body') => (req, res, next) => {
+  const result = schema.safeParse(req[source]);
 
   if (!result.success) {
     return res.status(400).json({
@@ -14,7 +16,13 @@ const validate = (schema) => (req, res, next) => {
     });
   }
 
-  req.body = result.data;
+  if (source === 'body') {
+    req.body = result.data;
+  } else {
+    req.validated = req.validated || {};
+    req.validated[source] = result.data;
+  }
+
   return next();
 };
 

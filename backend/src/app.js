@@ -3,15 +3,35 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const config = require('./config/env');
+const AppError = require('./utils/appError');
+const { apiLimiter } = require('./middleware/rateLimiters');
 const routes = require('./routes');
 
 const app = express();
 
-app.use(helmet());                          // safety headers
-app.use(cors());                            // open for now; we lock it down in Phase 4
-app.use(express.json({ limit: '100kb' }));  // read JSON bodies, reject huge ones
+// helmet adds safety headers (no "X-Powered-By: Express", nosniff, and more).
+app.use(helmet());
 
-app.use('/api', routes);                    // every route starts with /api
+// CORS: browsers will only let OUR React app call this API.
+// Requests with no Origin header (Postman, curl, server-to-server) are not browsers,
+// so CORS does not apply to them. It protects users' browsers, not the server itself.
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || config.corsOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new AppError(403, 'Origin not allowed by CORS'));
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
+
+app.use(express.json({ limit: '100kb' })); // read JSON bodies, reject huge ones
+
+app.use('/api', apiLimiter, routes);       // every route starts with /api
 
 // If no route matched, send a clean 404 (never leak internal details).
 app.use((req, res) => {

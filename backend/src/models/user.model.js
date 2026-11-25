@@ -35,4 +35,26 @@ const findById = async (id) => {
   return rows[0] || null;
 };
 
-module.exports = { toPublicUser, createUser, findByEmail, findById };
+// For the admin page.
+const listUsers = async (limit, offset) => {
+  const { rows } = await query(
+    `SELECT id, email, full_name, role, created_at
+     FROM users
+     ORDER BY created_at DESC
+     LIMIT $1 OFFSET $2`,
+    [limit, offset]
+  );
+  return rows;
+};
+
+// Returns the updated user, or null if no user has that id.
+const updateRole = async (id, role) => {
+  const { rows } = await query(
+    `UPDATE users SET role = $2 WHERE id = $1
+     RETURNING id, email, full_name, role, created_at`,
+    [id, role]
+  );
+  return rows[0] || null;
+};
+
+module.exports = { toPublicUser, createUser, findByEmail, findById, listUsers, updateRole };
