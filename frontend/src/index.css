@@ -1,0 +1,302 @@
+/* Mobile-first: these base styles are for a PHONE. Bigger screens get extras at the bottom.
+   Designed for elderly users: large text, big buttons, strong contrast. */
+
+:root {
+  color-scheme: light;
+  --blue: #0b4f8a;
+  --blue-dark: #083a66;
+  --text: #1b1b1b;
+  --muted: #4a4a4a;
+  --bg: #f4f7fa;
+  --card: #ffffff;
+  --border: #c9d3dd;
+  --error-bg: #fdecea;
+  --error-text: #8a1c12;
+  --ok-bg: #e6f4ea;
+  --ok-text: #14532d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+h1,
+h2 {
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0 0 12px;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin: 0 0 12px;
+}
+
+a {
+  color: var(--blue-dark);
+  font-weight: 600;
+}
+
+/* A clear outline when using the keyboard */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #f5a623;
+  outline-offset: 2px;
+}
+
+/* ---------- Layout ---------- */
+.app {
+  max-width: 760px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--blue);
+  color: #fff;
+}
+
+.brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 2px solid var(--blue);
+  border-radius: 10px;
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  background: var(--blue);
+  color: #fff;
+}
+
+.content {
+  padding: 16px;
+}
+
+.disclaimer {
+  padding: 16px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ---------- Login / signup pages ---------- */
+.auth-page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.brand-large {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--blue);
+  text-align: center;
+}
+
+.subtitle {
+  margin: 4px 0 20px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.center-text {
+  padding: 24px;
+  text-align: center;
+}
+
+/* ---------- Cards, lists ---------- */
+.card {
+  margin: 16px 0;
+  padding: 20px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.person {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-wrap: anywhere; /* long emails must not break the layout on a phone */
+}
+
+.plain-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.plain-list li {
+  margin-bottom: 6px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.hint {
+  margin: -8px 0 14px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: #e3eefa;
+  color: var(--blue-dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* ---------- Forms ---------- */
+label {
+  display: block;
+  font-weight: 600;
+}
+
+/* 18px text in inputs also stops phones from zooming in when you tap them */
+input[type='email'],
+input[type='password'],
+input[type='text'] {
+  width: 100%;
+  min-height: 52px;
+  margin: 4px 0 14px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+
+.checkbox input {
+  width: 24px;
+  height: 24px;
+}
+
+.switch-text {
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--blue);
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-small {
+  display: inline-block;
+  width: auto;
+  min-height: 44px;
+  padding: 0 16px;
+}
+
+.btn-danger {
+  background: #a61b1b;
+}
+
+.btn-outline-light {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+/* ---------- Messages ---------- */
+.alert {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.alert-error {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.alert-success {
+  background: var(--ok-bg);
+  color: var(--ok-text);
+}
+
+/* ---------- Bigger screens (tablet and laptop) ---------- */
+@media (min-width: 700px) {
+  .content {
+    padding: 24px;
+  }
+
+  .person {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
