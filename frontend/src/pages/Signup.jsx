@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AuthShell from '../components/AuthShell.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { describeError } from '../api/client.js';
 
@@ -25,12 +26,10 @@ export default function Signup() {
   };
 
   return (
-    <div className="auth-page">
-      <h1 className="brand-large">MediMind</h1>
-      <p className="subtitle">Create your free account.</p>
-
+    <AuthShell>
       <form className="card" onSubmit={handleSubmit}>
-        <h2>Sign up</h2>
+        <h1>Create your account</h1>
+        <p className="muted form-intro">It only takes a minute, and it is free.</p>
 
         {error && (
           <p className="alert alert-error" role="alert">
@@ -90,6 +89,6 @@ export default function Signup() {
       <p className="disclaimer">
         MediMind does not diagnose and is not medical advice. Always talk to your doctor.
       </p>
-    </div>
+    </AuthShell>
   );
 }

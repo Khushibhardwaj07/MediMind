@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AuthShell from '../components/AuthShell.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { describeError } from '../api/client.js';
 
@@ -12,12 +13,11 @@ export default function Login() {
   const [busy, setBusy] = useState(false);
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // stop the browser from reloading the page
+    event.preventDefault();
     setError('');
     setBusy(true);
     try {
       await login(email.trim(), password);
-      // On success, PublicOnlyRoute sees the user and moves us to the app.
     } catch (err) {
       setError(describeError(err));
       setBusy(false);
@@ -25,12 +25,10 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-page">
-      <h1 className="brand-large">MediMind</h1>
-      <p className="subtitle">Understand your medical reports in simple words.</p>
-
+    <AuthShell>
       <form className="card" onSubmit={handleSubmit}>
-        <h2>Log in</h2>
+        <h1>Welcome back</h1>
+        <p className="muted form-intro">Log in to see your health information.</p>
 
         {error && (
           <p className="alert alert-error" role="alert">
@@ -79,6 +77,6 @@ export default function Login() {
       <p className="disclaimer">
         MediMind does not diagnose and is not medical advice. Always talk to your doctor.
       </p>
-    </div>
+    </AuthShell>
   );
 }

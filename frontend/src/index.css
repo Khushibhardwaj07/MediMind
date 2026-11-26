@@ -1,19 +1,33 @@
-/* Mobile-first: these base styles are for a PHONE. Bigger screens get extras at the bottom.
-   Designed for elderly users: large text, big buttons, strong contrast. */
+/* MediMind look: calm sage + warm cream + a touch of peach.
+   Mobile-first (phone styles first, bigger screens at the bottom).
+   Still elderly-friendly: big text, big buttons, strong contrast.
+   To change the whole colour scheme, edit the variables just below. */
 
 :root {
   color-scheme: light;
-  --blue: #0b4f8a;
-  --blue-dark: #083a66;
-  --text: #1b1b1b;
-  --muted: #4a4a4a;
-  --bg: #f4f7fa;
-  --card: #ffffff;
-  --border: #c9d3dd;
-  --error-bg: #fdecea;
-  --error-text: #8a1c12;
-  --ok-bg: #e6f4ea;
-  --ok-text: #14532d;
+
+  --bg: #e6efe9;            /* sage page base */
+  --surface: #ffffff;       /* cards */
+  --text: #26322f;          /* soft dark green-grey, easier than pure black */
+  --muted: #5c6b67;
+
+  --primary: #2e6f68;       /* calm sage-teal */
+  --primary-dark: #235852;
+  --primary-tint: #e4f0ec;  /* very light sage */
+
+  --accent: #c77b4d;        /* warm terracotta, used sparingly */
+  --peach: #f6e9df;
+
+  --border: #d3ddd8;
+  --error-bg: #fbeae6;
+  --error-text: #8c2f22;
+  --ok-bg: #e5f2e9;
+  --ok-text: #1f5133;
+  --danger: #a8433a;
+
+  --shadow-soft: 0 2px 4px rgba(38, 50, 47, 0.05), 0 12px 28px rgba(38, 50, 47, 0.09);
+  --radius: 18px;
+  --font-heading: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
 }
 
 * {
@@ -21,147 +35,369 @@
 }
 
 html {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 body {
   margin: 0;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color: var(--text);
-  background: var(--bg);
-  line-height: 1.5;
+  line-height: 1.6;
+  /* A slow diagonal blend from sage to warm peach, with a soft glow in the corner */
+  background:
+    radial-gradient(circle at 90% 5%, rgba(255, 244, 224, 0.75) 0, transparent 40%),
+    linear-gradient(160deg, #d9eadf 0%, #e6efe9 45%, #f1e2d3 100%);
+  background-attachment: fixed;
 }
 
 h1,
-h2 {
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
   line-height: 1.25;
+  color: var(--primary-dark);
 }
 
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.75rem;
   margin: 0 0 12px;
 }
 
 h2 {
-  font-size: 1.25rem;
-  margin: 0 0 12px;
+  font-size: 1.3rem;
+  margin: 0 0 14px;
 }
 
 a {
-  color: var(--blue-dark);
+  color: var(--primary-dark);
   font-weight: 600;
+  text-underline-offset: 3px;
 }
 
-/* A clear outline when using the keyboard */
+/* A clear warm outline when using the keyboard */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {
-  outline: 3px solid #f5a623;
-  outline-offset: 2px;
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
 }
 
-/* ---------- Layout ---------- */
+/* ---------- Layout (after login) ---------- */
 .app {
-  max-width: 760px;
+  max-width: 960px;
   margin: 0 auto;
   min-height: 100vh;
-  background: var(--bg);
 }
 
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--blue);
+  padding: 14px 16px;
   color: #fff;
+  background: linear-gradient(135deg, #235852 0%, #2e6f68 55%, #3a8176 100%);
+  box-shadow: 0 6px 20px rgba(35, 88, 82, 0.25);
 }
 
 .brand {
-  font-size: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
   font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.topbar .brand {
+  color: #fff;
+}
+
+/* The logo: a rounded badge with a "plus", drawn with CSS only.
+   The two plus bars are layered on top of the coloured background. */
+.brand::before {
+  content: '';
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background:
+    linear-gradient(#fff, #fff) center / 50% 13% no-repeat,
+    linear-gradient(#fff, #fff) center / 13% 50% no-repeat,
+    linear-gradient(135deg, var(--primary), #4a9a8f);
+  box-shadow: 0 4px 10px rgba(46, 111, 104, 0.3);
+}
+
+/* On the dark top bar the logo flips: white badge, green plus */
+.topbar .brand::before {
+  background:
+    linear-gradient(var(--primary), var(--primary)) center / 50% 13% no-repeat,
+    linear-gradient(var(--primary), var(--primary)) center / 13% 50% no-repeat,
+    #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
 
 .nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 12px 16px;
-  background: #fff;
-  border-bottom: 1px solid var(--border);
+  gap: 10px;
+  padding: 18px 16px 0;
 }
 
 .nav-link {
   display: inline-flex;
   align-items: center;
   min-height: 48px;
-  padding: 0 18px;
-  border: 2px solid var(--blue);
-  border-radius: 10px;
-  color: var(--blue);
+  padding: 0 22px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--primary-dark);
   font-weight: 600;
   text-decoration: none;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.nav-link:hover {
+  background: #fff;
 }
 
 .nav-link.active {
-  background: var(--blue);
+  background: var(--primary);
+  border-color: var(--primary);
   color: #fff;
+  box-shadow: 0 6px 14px rgba(46, 111, 104, 0.25);
 }
 
 .content {
-  padding: 16px;
+  padding: 20px 16px;
 }
 
 .disclaimer {
-  padding: 16px;
+  margin: 8px 16px 24px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px dashed #b9c8c1;
+  border-radius: 14px;
   font-size: 0.85rem;
   color: var(--muted);
   text-align: center;
 }
 
-/* ---------- Login / signup pages ---------- */
-.auth-page {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 24px 16px;
-}
-
-.brand-large {
-  margin: 0;
-  font-size: 2rem;
-  color: var(--blue);
-  text-align: center;
-}
-
-.subtitle {
-  margin: 4px 0 20px;
+.center-text {
+  padding: 24px;
   text-align: center;
   color: var(--muted);
 }
 
-.center-text {
-  padding: 24px;
+/* The "page not found" page */
+.auth-page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 32px 16px;
   text-align: center;
+}
+
+/* ---------- Login / signup: picture on the left, form on the right ---------- */
+.auth-split {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* On a phone the picture is a banner at the top */
+.auth-visual {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+  background: linear-gradient(#cfe7df, #f6e9df);
+}
+
+.auth-visual svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.auth-visual-text {
+  position: relative;
+  z-index: 1;
+  padding: 20px 20px 0;
+}
+
+.auth-tagline {
+  max-width: 13em;
+  margin: 14px 0 0;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary-dark);
+}
+
+.auth-visual-sub {
+  display: none;
+}
+
+/* The form card slides up over the bottom edge of the banner */
+.auth-panel {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: -36px;
+  padding: 0 16px 24px;
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 440px;
+}
+
+.auth-box .disclaimer {
+  margin: 8px 0 0;
+}
+
+.form-intro {
+  margin: -6px 0 18px;
+}
+
+/* ---------- Welcome banner and tiles (home page) ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 22px;
+  padding: 28px 22px;
+  color: #fff;
+  background: linear-gradient(135deg, #235852 0%, #2e6f68 55%, #3a8176 100%);
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Two soft circles for decoration */
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero::before {
+  top: -50px;
+  right: -40px;
+  width: 190px;
+  height: 190px;
+}
+
+.hero::after {
+  right: 70px;
+  bottom: -70px;
+  width: 130px;
+  height: 130px;
+}
+
+.hero h1,
+.hero p {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  color: #fff;
+}
+
+.hero p {
+  max-width: 34em;
+  margin: 0 0 6px;
+}
+
+.hero .badge {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.tiles {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.tile {
+  display: block;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.tile-icon {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 2rem;
+}
+
+.tile h3 {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+}
+
+.tile p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.tile-link {
+  border-top: 5px solid var(--primary);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tile-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(38, 50, 47, 0.06), 0 18px 34px rgba(38, 50, 47, 0.14);
+}
+
+.soon-tag {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 2px 12px;
+  background: var(--peach);
+  border-radius: 999px;
+  color: #8a4a22;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 /* ---------- Cards, lists ---------- */
 .card {
-  margin: 16px 0;
-  padding: 20px 16px;
-  background: var(--card);
+  margin: 18px 0;
+  padding: 24px 20px;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
 }
 
 .person {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 12px;
-  padding: 14px 16px;
-  background: var(--card);
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-left: 5px solid var(--primary);
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
   overflow-wrap: anywhere; /* long emails must not break the layout on a phone */
 }
 
@@ -171,7 +407,7 @@ input:focus-visible {
 }
 
 .plain-list li {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .muted {
@@ -179,19 +415,19 @@ input:focus-visible {
 }
 
 .hint {
-  margin: -8px 0 14px;
+  margin: -8px 0 16px;
   font-size: 0.9rem;
   color: var(--muted);
 }
 
 .badge {
   display: inline-block;
-  padding: 2px 12px;
+  padding: 3px 14px;
+  background: var(--primary-tint);
   border-radius: 999px;
-  background: #e3eefa;
-  color: var(--blue-dark);
+  color: var(--primary-dark);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: capitalize;
 }
 
@@ -199,6 +435,7 @@ input:focus-visible {
 label {
   display: block;
   font-weight: 600;
+  color: var(--primary-dark);
 }
 
 /* 18px text in inputs also stops phones from zooming in when you tap them */
@@ -206,30 +443,42 @@ input[type='email'],
 input[type='password'],
 input[type='text'] {
   width: 100%;
-  min-height: 52px;
-  margin: 4px 0 14px;
-  padding: 10px 12px;
+  min-height: 54px;
+  margin: 6px 0 16px;
+  padding: 10px 14px;
   font-size: 1rem;
-  background: #fff;
+  color: var(--text);
+  background: #fcfbf8;
   border: 2px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type='email']:focus,
+input[type='password']:focus,
+input[type='text']:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-tint);
+  outline: none;
 }
 
 .checkbox {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 18px;
   font-weight: 400;
+  color: var(--text);
 }
 
 .checkbox input {
   width: 24px;
   height: 24px;
+  accent-color: var(--primary);
 }
 
 .switch-text {
-  margin: 16px 0 0;
+  margin: 18px 0 0;
   text-align: center;
 }
 
@@ -237,15 +486,25 @@ input[type='text'] {
 .btn {
   display: block;
   width: 100%;
-  min-height: 52px;
-  padding: 0 16px;
+  min-height: 54px;
+  padding: 0 18px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #fff;
-  background: var(--blue);
+  background: var(--primary);
   border: 0;
-  border-radius: 10px;
+  border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(46, 111, 104, 0.25);
   cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .btn:disabled {
@@ -257,46 +516,141 @@ input[type='text'] {
   display: inline-block;
   width: auto;
   min-height: 44px;
-  padding: 0 16px;
+  padding: 0 18px;
+  box-shadow: none;
 }
 
 .btn-danger {
-  background: #a61b1b;
+  background: var(--danger);
 }
 
+.btn-danger:hover:not(:disabled) {
+  background: #8c352d;
+}
+
+/* The log out button sits on the dark top bar, so it is a white outline button */
 .btn-outline-light {
   background: transparent;
   color: #fff;
-  border: 2px solid #fff;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.btn-outline-light:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 /* ---------- Messages ---------- */
 .alert {
-  margin: 0 0 14px;
-  padding: 12px 14px;
-  border-radius: 10px;
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
   font-weight: 600;
 }
 
 .alert-error {
   background: var(--error-bg);
   color: var(--error-text);
+  border: 1px solid #f0c9c1;
 }
 
 .alert-success {
   background: var(--ok-bg);
   color: var(--ok-text);
+  border: 1px solid #c4e2cf;
+}
+
+/* ---------- Drifting leaves in the picture ---------- */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(8deg);
+  }
+}
+
+.float {
+  animation: drift 7s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.float-2 {
+  animation-duration: 9s;
+  animation-delay: -3s;
+}
+
+.float-3 {
+  animation-duration: 11s;
+  animation-delay: -6s;
 }
 
 /* ---------- Bigger screens (tablet and laptop) ---------- */
 @media (min-width: 700px) {
+  .topbar {
+    padding: 16px 24px;
+    border-radius: 0 0 24px 24px;
+  }
+
+  .nav {
+    padding: 22px 24px 0;
+  }
+
   .content {
     padding: 24px;
+  }
+
+  .hero {
+    padding: 36px 32px;
   }
 
   .person {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  }
+}
+
+/* Laptop: the picture fills the left half, the form sits in the right half */
+@media (min-width: 900px) {
+  .auth-split {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+  }
+
+  .auth-visual {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .auth-visual-text {
+    padding: 56px 48px;
+  }
+
+  .auth-tagline {
+    font-size: 2.2rem;
+  }
+
+  .auth-visual-sub {
+    display: block;
+    max-width: 24em;
+    margin: 14px 0 0;
+    font-size: 1.05rem;
+    color: var(--primary-dark);
+  }
+
+  .auth-panel {
+    align-items: center;
+    margin-top: 0;
+    padding: 32px;
+  }
+}
+
+/* People who feel unwell with motion can turn it off in their phone settings */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
   }
 }
